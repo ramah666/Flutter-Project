@@ -21,187 +21,326 @@ class FindDoctor extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  late PageController _pageController;
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(),
-      drawer: drawer(),
+      appBar: buildAppBar(),
+      drawer: buildDrawer(),
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          searchBar(context),
+          buildSearchBar(context),
+          SizedBox(height: 20),
+          buildPageView(),
+          SizedBox(height: 20),
+          buildPageButtons(),
+          SizedBox(height: 10),
         ],
       ),
     );
   }
-}
 
-AppBar appbar() {
-  return AppBar(
-    backgroundColor: Colors.white,
-    leading: Builder(
-      builder: (context) => IconButton(
-        icon: Icon(Icons.menu, color: Colors.black),
-        onPressed: () => Scaffold.of(context).openDrawer(),
-      ),
-    ),
-    title: Row(
-      children: [
-        Text(
-          'SECOND',
-          style: TextStyle(
-            color: Colors.blue[900],
-            fontWeight: FontWeight.bold,
-          ),
+  AppBar buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      leading: Builder(
+        builder: (context) => IconButton(
+          icon: Icon(Icons.menu, color: Colors.grey[600]),
+          onPressed: () => Scaffold.of(context).openDrawer(),
         ),
-        Text(
-          ' OPI',
+      ),
+      title: RichText(
+        text: TextSpan(
           style: TextStyle(
-            color: Colors.blue[900],
-            fontWeight: FontWeight.normal,
+            color: Colors.blueAccent[700],
+            fontSize: 18,
           ),
+          children: [
+            TextSpan(
+              text: 'Second ',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextSpan(
+              text: 'Opi',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      ),
+      centerTitle: false,
+      actions: [
+        IconButton(
+          icon: Icon(Icons.notifications, color: Colors.grey[600]),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(Icons.account_circle_outlined, color: Colors.grey[600]),
+          onPressed: () {},
         ),
       ],
-    ),
-    actions: [
-      IconButton(
-        icon: Icon(Icons.account_circle, color: Colors.grey[600], size: 35),
-        onPressed: () {},
-      ),
-    ],
-    elevation: 0.0,
-  );
-}
+    );
+  }
 
-Drawer drawer() {
-  return Drawer(
-    child: ListView(
-      padding: EdgeInsets.zero,
-      children: [
-        DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.blue[900],
-          ),
-          child: Text(
-            'Menu',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
+  Drawer buildDrawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Text(
+              'Menu',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
             ),
           ),
-        ),
-        ListTile(
-          title: Text('Home'),
-          onTap: () {
-            // Update this with your own functionality
-          },
-        ),
-        ListTile(
-          title: Text('Find A Doctor'),
-          onTap: () {
-            // Update this with your own functionality
-          },
-        ),
-        ListTile(
-          title: Text('Specialties'),
-          onTap: () {
-            // Update this with your own functionality
-          },
-        ),
-        ListTile(
-          title: Text('About US'),
-          onTap: () {
-            // Update this with your own functionality
-          },
-        ),
-      ],
-    ),
-  );
-}
+          buildDrawerItem(Icons.home, 'Home'),
+          buildDrawerItem(Icons.person, 'Profile'),
+          buildDrawerItem(Icons.settings, 'Settings'),
+          buildDrawerItem(Icons.help, 'Help'),
+        ],
+      ),
+    );
+  }
 
-Widget searchBar(BuildContext context) {
-  return Container(
-    margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-    decoration: BoxDecoration(
-      boxShadow: [
-        BoxShadow(
-          color: Color(0xff1D1617).withOpacity(0.11),
-          blurRadius: 40,
-          spreadRadius: 0.0,
+  ListTile buildDrawerItem(IconData icon, String title) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      onTap: () {},
+    );
+  }
+
+  Widget buildSearchBar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: TextField(
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.grey[200],
+          hintText: 'Find a doctor',
+          prefixIcon: Icon(Icons.search, color: Colors.black),
+          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+            borderSide: BorderSide.none,
+          ),
         ),
-      ],
-    ),
-    child: TextField(
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: EdgeInsets.all(15),
-        hintText: 'Search For Doctor',
-        hintStyle: TextStyle(
-          color: Color(0xffDDDADA),
-          fontSize: 14,
-        ),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.all(12),
-          child: SvgPicture.asset('assets/icons/Search.svg'),
-        ),
-        suffixIcon: Container(
-          width: 100,
-          child: IntrinsicHeight(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+      ),
+    );
+  }
+
+  Expanded buildPageView() {
+    return Expanded(
+      child: PageView.builder(
+        controller: _pageController,
+        onPageChanged: (int page) {
+          setState(() {
+            _currentPage = page;
+          });
+        },
+        itemCount: 4,
+        itemBuilder: (BuildContext context, int pageIndex) {
+          return ListView(
+            children: buildDoctorInfoCards(pageIndex),
+          );
+        },
+      ),
+    );
+  }
+
+  List<Widget> buildDoctorInfoCards(int pageIndex) {
+    List<Map<String, String>> doctors = [
+      {
+        'image': 'assets/icons/doctor1.jpg',
+        'name': 'Dr. Samantha Garcia',
+        'specialty': 'Dentist',
+        'experience': '4-5 years Experience',
+        'description': 'Dr. Samantha Ruthprabhu believes in the goodness and potential inherent in all human beings. She offers her unconditional positive regard in her professional therapeutic practice for her clients to rise.',
+        'fees': '\$45 Consultation Fees',
+        'rating': '4.5/5 Rating',
+      },
+      {
+        'image': 'assets/icons/doctor2.jpg',
+        'name': 'Dr. John Doe',
+        'specialty': 'Pediatrician',
+        'experience': '6 years Experience',
+        'description': 'Dr. John Doe specializes in pediatric care and has been serving the community with compassion and expertise.',
+        'fees': '\$50 Consultation Fees',
+        'rating': '4.8/5 Rating',
+      },
+      // Add other doctors' data here...
+    ];
+
+    return doctors.map((doctor) {
+      return buildDoctorInfoCard(
+        doctor['image']!,
+        doctor['name']!,
+        doctor['specialty']!,
+        doctor['experience']!,
+        doctor['description']!,
+        doctor['fees']!,
+        doctor['rating']!,
+      );
+    }).toList();
+  }
+
+  Widget buildDoctorInfoCard(
+      String imagePath,
+      String doctorName,
+      String specialty,
+      String experience,
+      String description,
+      String fees,
+      String rating,
+      ) {
+    return Card(
+      color: Colors.grey[50],
+      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+      child: Padding(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                VerticalDivider(
-                  color: Colors.black,
-                  indent: 10,
-                  endIndent: 10,
-                  thickness: 0.1,
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: AssetImage(imagePath),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      cardColor: Colors.lightBlue[50],
+                SizedBox(width: 20.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      doctorName,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    child: PopupMenuButton<String>(
-                      icon: SvgPicture.asset('assets/icons/Filter.svg'),
-                      onSelected: (value) {
-                        // Handle the selected specialty
-                        print(value);
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return [
-                          PopupMenuItem<String>(
-                            value: 'Dermatology',
-                            child: Text('Dermatology'),
-                          ),
-                          PopupMenuItem<String>(
-                            value: 'Gynaecology',
-                            child: Text('Gynaecology'),
-                          ),
-                          PopupMenuItem<String>(
-                            value: 'Dental',
-                            child: Text('Dental'),
-                          ),
-                          PopupMenuItem<String>(
-                            value: 'Pediatrics',
-                            child: Text('Pediatrics'),
-                          ),
-                        ];
-                      },
-                    ),
-                  ),
+                    Text(specialty),
+                    Text(experience),
+                  ],
                 ),
               ],
             ),
-          ),
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide.none,
+            SizedBox(height: 20.0),
+            Text(description),
+            SizedBox(height: 10.0),
+            Text(
+              fees,
+              style: TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              rating,
+              style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10.0),
+            ElevatedButton(
+              onPressed: () {
+                // Implement your logic for booking an appointment
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+              ),
+              child: Text(
+                'Book Appointment',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-    ),
-  );
+    );
+  }
+
+  Widget buildPageButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(4, (index) {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 2.0),
+          child: ElevatedButton(
+            onPressed: () {
+              _pageController.animateToPage(
+                index,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.ease,
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: _currentPage == index ? Colors.blue : Colors.lightBlue[100],
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              minimumSize: Size(20, 20),
+              textStyle: TextStyle(fontSize: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text('${index + 1}'),
+          ),
+        );
+      })..add(
+        ElevatedButton(
+          onPressed: () {
+            if (_currentPage < 3) {
+              _pageController.nextPage(
+                duration: Duration(milliseconds: 500),
+                curve: Curves.ease,
+              );
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.blue,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            minimumSize: Size(20, 20),
+          ),
+          child: Icon(Icons.double_arrow, color: Colors.blue, size: 24.0),
+        ),
+      ),
+    );
+  }
 }
