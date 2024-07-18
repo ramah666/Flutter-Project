@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:secondopi/pages/footer.dart';
+import 'package:secondopi/pages/Specialties.dart';
 void main() {
   runApp(FindDoctor());
 }
 
 class FindDoctor extends StatelessWidget {
-  const FindDoctor({super.key});
+  const FindDoctor({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // To Disable Debug
+      debugShowCheckedModeBanner: false,
       title: 'Second Opi',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -46,17 +46,36 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      drawer: buildDrawer(),
+      drawer: buildDrawer(context),
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          buildSearchBar(context),
-          SizedBox(height: 20),
-          buildPageView(),
-          SizedBox(height: 20),
-          buildPageButtons(),
-          SizedBox(height: 10),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildSearchBar(context),
+            SizedBox(height: 20),
+            Container(
+              height: 600, // Set a fixed height for the PageView
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: (int page) {
+                  setState(() {
+                    _currentPage = page;
+                  });
+                },
+                itemCount: 4,
+                itemBuilder: (BuildContext context, int pageIndex) {
+                  return ListView(
+                    children: buildDoctorInfoCards(pageIndex),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 20),
+            buildPageButtons(),
+            SizedBox(height: 10),
+            Footer(),
+          ],
+        ),
       ),
     );
   }
@@ -106,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Drawer buildDrawer() {
+  Drawer buildDrawer(BuildContext context) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -123,20 +142,40 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          buildDrawerItem(Icons.home, 'Home'),
-          buildDrawerItem(Icons.person, 'Profile'),
-          buildDrawerItem(Icons.settings, 'Settings'),
-          buildDrawerItem(Icons.help, 'Help'),
+          buildDrawerItem(Icons.home, 'Home', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          }),
+          buildDrawerItem(Icons.search, 'Find A Doctor', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => FindDoctor()),
+            );
+          }),
+          buildDrawerItem(Icons.add_business_rounded, 'Specialties', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Specialties()),
+            );
+          }),
+          buildDrawerItem(Icons.help, 'Help', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HelpPage()),
+            );
+          }),
         ],
       ),
     );
   }
 
-  ListTile buildDrawerItem(IconData icon, String title) {
+  ListTile buildDrawerItem(IconData icon, String title, Function() onTap) {
     return ListTile(
       leading: Icon(icon),
       title: Text(title),
-      onTap: () {},
+      onTap: onTap,
     );
   }
 
@@ -155,25 +194,6 @@ class _MyHomePageState extends State<MyHomePage> {
             borderSide: BorderSide.none,
           ),
         ),
-      ),
-    );
-  }
-
-  Expanded buildPageView() {
-    return Expanded(
-      child: PageView.builder(
-        controller: _pageController,
-        onPageChanged: (int page) {
-          setState(() {
-            _currentPage = page;
-          });
-        },
-        itemCount: 4,
-        itemBuilder: (BuildContext context, int pageIndex) {
-          return ListView(
-            children: buildDoctorInfoCards(pageIndex),
-          );
-        },
       ),
     );
   }
@@ -341,6 +361,46 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Icon(Icons.double_arrow, color: Colors.blue, size: 24.0),
         ),
       ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Home')),
+      body: Center(child: Text('Home Page')),
+    );
+  }
+}
+
+class FindDoctorPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Find A Doctor')),
+      body: Center(child: Text('Find A Doctor Page')),
+    );
+  }
+}
+
+class SpecialtiesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Specialties')),
+      body: Center(child: Text('Specialties Page')),
+    );
+  }
+}
+
+class HelpPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Help')),
+      body: Center(child: Text('Help Page')),
     );
   }
 }

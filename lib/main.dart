@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:secondopi/pages/find_doctor.dart';
+import 'package:secondopi/pages/Specialties.dart';
+
+
 
 void main() {
   runApp(MyApp());
@@ -16,6 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, //To Disable Debug
 
       home: FindDoctor(),
+
     );
 
   }
