@@ -4,9 +4,6 @@ import 'package:secondopi/pages/SpecialtiesImages.dart';
 import 'package:secondopi/pages/footer.dart';
 import 'package:secondopi/pages/find_doctor.dart';
 
-void main() {
-  runApp(Specialties());
-}
 
 class Specialties extends StatelessWidget {
   const Specialties({super.key});

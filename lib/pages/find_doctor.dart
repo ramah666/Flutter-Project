@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:secondopi/pages/footer.dart';
 import 'package:secondopi/pages/Specialties.dart';
-void main() {
-  runApp(FindDoctor());
-}
+import 'package:secondopi/pages/about_us.dart';
+import 'package:secondopi/pages/upper_bar.dart';
+import 'package:secondopi/pages/help.dart';
+import 'package:secondopi/pages/HomePage.dart';
+
 
 class FindDoctor extends StatelessWidget {
-  const FindDoctor({Key? key}) : super(key: key);
-
+      const FindDoctor({ super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: UpperBar(),
       drawer: buildDrawer(context),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -80,50 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      leading: Builder(
-        builder: (context) => IconButton(
-          icon: Icon(Icons.menu, color: Colors.grey[600]),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        ),
-      ),
-      title: RichText(
-        text: TextSpan(
-          style: TextStyle(
-            color: Colors.blueAccent[700],
-            fontSize: 18,
-          ),
-          children: [
-            TextSpan(
-              text: 'Second ',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(
-              text: 'Opi',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-      ),
-      centerTitle: false,
-      actions: [
-        IconButton(
-          icon: Icon(Icons.notifications, color: Colors.grey[600]),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: Icon(Icons.account_circle_outlined, color: Colors.grey[600]),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
+
 
   Drawer buildDrawer(BuildContext context) {
     return Drawer(
@@ -164,6 +122,13 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => HelpPage()),
+            );
+          }),
+
+          buildDrawerItem(Icons.info, 'About Us', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AboutUs()),
             );
           }),
         ],
