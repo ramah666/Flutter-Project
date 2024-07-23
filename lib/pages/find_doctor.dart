@@ -118,13 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
               MaterialPageRoute(builder: (context) => Specialties()),
             );
           }),
-          buildDrawerItem(Icons.help, 'Help', () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HelpPage()),
-            );
-          }),
-
           buildDrawerItem(Icons.info, 'About Us', () {
             Navigator.push(
               context,
